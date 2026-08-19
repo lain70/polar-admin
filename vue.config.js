@@ -4,7 +4,7 @@ module.exports = {
     config.output.chunkFilename('[id].[chunkhash:8].js')
     config.plugins.delete('prefetch')
   },
-  publicPath: undefined,
+  publicPath: process.env.VUE_APP_PUBLIC_PATH || undefined,
   lintOnSave: false,
   devServer: {
     port: 9001,
