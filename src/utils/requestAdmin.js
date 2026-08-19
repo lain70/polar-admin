@@ -38,8 +38,9 @@ service.interceptors.response.use(
       localStorage.removeItem('adminDepartment')
       localStorage.removeItem('adminPosition')
 
-      if (window.location.pathname !== '/login') {
-        window.location.replace('/login')
+      const loginPath = `${process.env.BASE_URL}login`
+      if (window.location.pathname !== loginPath) {
+        window.location.replace(loginPath)
       }
     }
 

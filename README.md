@@ -11,3 +11,4 @@ Polar Bear Shop 관리자용 Vue 2 애플리케이션입니다.
 
 API 주소와 서비스 키, 고객 화면 주소는 각각 `VUE_APP_API_BASE_URL`,
 `VUE_APP_SERVICE_KEY`, `VUE_APP_CUSTOMER_BASE_URL` 환경변수로 설정합니다.
+운영에서 하위 경로로 배포할 때는 `VUE_APP_PUBLIC_PATH`를 설정합니다.
