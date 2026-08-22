@@ -114,7 +114,7 @@ export default {
         this.totalCount = data.totalCount
         this.brandOptions = data.brands
         this.categoryOptions = data.categories
-      }).catch(() => { this.errorMessage = '상품 목록을 불러오지 못했습니다.' }).finally(() => { this.isLoading = false })
+      }).catch(error => { const responseData = error.response && error.response.data; this.errorMessage = (responseData && responseData.ERROR_MSG) || '상품 목록을 불러오지 못했습니다.' }).finally(() => { this.isLoading = false })
     },
     searchGoods () {
       this.currentPage = 1

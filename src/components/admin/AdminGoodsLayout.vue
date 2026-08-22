@@ -4,15 +4,16 @@
       <router-link class="brand" :to="{ name: 'adminDashboard' }"><span>P</span> POLAR ADMIN</router-link>
       <nav aria-label="관리자 메뉴">
         <router-link :to="{ name: 'adminDashboard' }">대시보드</router-link>
-        <router-link class="active" :to="{ name: 'adminGoodsList' }">상품 관리</router-link>
-        <a href="#">회원 관리</a>
+        <router-link :to="{ name: 'adminGoodsList' }">상품 관리</router-link>
+        <router-link :to="{ name: 'adminUserList' }">회원 관리</router-link>
+        <router-link :to="{ name: 'adminAdminList' }">관리자 관리</router-link>
         <a href="#">문의 관리</a>
       </nav>
       <a :href="customerBaseUrl">상점으로 이동 ↗</a>
     </aside>
     <main>
       <header>
-        <div><p>GOODS MANAGEMENT</p><h1>{{ title }}</h1></div>
+        <div><p>{{ eyebrow }}</p><h1>{{ title }}</h1></div>
         <button type="button" :disabled="isLoggingOut" @click="logout">로그아웃</button>
       </header>
       <slot />
@@ -25,7 +26,10 @@ import envs from '@/envs'
 
 export default {
   name: 'AdminGoodsLayout',
-  props: { title: { type: String, required: true } },
+  props: {
+    title: { type: String, required: true },
+    eyebrow: { type: String, default: 'ADMINISTRATION' }
+  },
   data: () => ({ isLoggingOut: false, customerBaseUrl: envs.customerBaseUrl }),
   methods: {
     logout () {
@@ -45,7 +49,7 @@ aside { min-height: 100vh; padding: 34px 28px; box-sizing: border-box; display: 
 .brand span { width: 32px; height: 32px; display: grid; place-items: center; border: 1px solid #77928e; border-radius: 50%; font-family: Georgia, serif; }
 nav { margin-top: 72px; display: flex; flex-direction: column; gap: 8px; }
 nav a { padding: 14px 16px; border-left: 2px solid transparent; color: #9eb1ae; font-size: 13px; text-decoration: none; }
-nav a.active { border-color: #9fc5be; background: rgba(255,255,255,.06); color: #fff; }
+nav a.active,nav a.router-link-active { border-color: #9fc5be; background: rgba(255,255,255,.06); color: #fff; }
 aside > a:last-child { margin-top: auto; color: #9fc5be; font-size: 11px; text-decoration: none; }
 main { min-width: 0; padding: 42px 48px 64px; }
 header { display: flex; align-items: center; justify-content: space-between; }

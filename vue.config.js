@@ -7,10 +7,10 @@ module.exports = {
   publicPath: process.env.VUE_APP_PUBLIC_PATH || undefined,
   lintOnSave: false,
   devServer: {
-    port: 9001,
+    port: 9100,
     proxy: {
       '^/api': {
-        target: 'http://localhost:9090/api'
+        target: 'http://localhost:8080'
       }
     }
   },
