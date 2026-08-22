@@ -30,3 +30,19 @@ export function createAdminGoods (formData) {
     data: formData
   })
 }
+
+export function getAdminUserList () {
+  return requestAdmin({ url: '/admin/users', method: 'GET' })
+}
+
+export function getAdminUser (userNo) {
+  return requestAdmin({ url: `/admin/users/${userNo}`, method: 'GET' })
+}
+
+export function getAdminList () {
+  return requestAdmin({ url: '/admin/admins', method: 'GET' })
+}
+
+export function getAdmin (adminNo) {
+  return requestAdmin({ url: `/admin/admins/${adminNo}`, method: 'GET' })
+}

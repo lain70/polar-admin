@@ -29,6 +29,26 @@ const routes = [{
   component: () => import('@/views/admin/goods/AdminGoodsDetailView.vue')
 },
 {
+  path: '/users',
+  name: 'adminUserList',
+  component: () => import('@/views/admin/users/AdminUserListView.vue')
+},
+{
+  path: '/users/:userNo',
+  name: 'adminUserDetail',
+  component: () => import('@/views/admin/users/AdminUserDetailView.vue')
+},
+{
+  path: '/admins',
+  name: 'adminAdminList',
+  component: () => import('@/views/admin/admins/AdminAdminListView.vue')
+},
+{
+  path: '/admins/:adminNo',
+  name: 'adminAdminDetail',
+  component: () => import('@/views/admin/admins/AdminAdminDetailView.vue')
+},
+{
   path: '*',
   redirect: { name: 'adminDashboard' }
 }]
