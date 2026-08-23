@@ -7,7 +7,7 @@
         <dl><div><dt>작성자</dt><dd>{{ qna.qnaUserId || '-' }}</dd></div><div><dt>등록일시</dt><dd>{{ formatDateTime(qna.regDate) }}</dd></div><div><dt>수정일시</dt><dd>{{ formatDateTime(qna.updtDate) }}</dd></div></dl>
       </section>
       <section class="content-card"><h2>문의 내용</h2><p>{{ qna.qnaContents }}</p></section>
-      <section class="content-card reply-card"><div class="section-heading"><div><p class="eyebrow">CUSTOMER SUPPORT</p><h2>답변 작성</h2></div><span v-if="qna.qnaReplyNo">답변 수정</span><span v-else>새 답변</span></div><label>답변 내용<textarea v-model.trim="replyContents" rows="10" placeholder="문의에 대한 답변을 입력해 주세요."></textarea></label><p v-if="saveError" class="error" role="alert">{{ saveError }}</p><div class="actions"><router-link :to="{ name: 'adminQnaList' }">목록으로</router-link><button type="button" :disabled="isSaving || !replyContents" @click="saveReply">{{ isSaving ? '저장 중' : '답변 저장' }}</button></div></section>
+      <section class="content-card reply-card"><div class="section-heading"><div><p class="eyebrow">CUSTOMER SUPPORT</p><h2>답변 작성</h2></div><span v-if="qna.qnaReplyNo">답변 수정</span><span v-else>새 답변</span></div><label>답변 내용<textarea v-model.trim="replyContents" rows="10" placeholder="문의에 대한 답변을 입력해 주세요."></textarea></label><p v-if="saveError" class="error" role="alert">{{ saveError }}</p><div class="actions"><router-link :to="{ name: 'adminQnaList' }">목록으로</router-link><button type="button" :disabled="isSaving || !replyContents" @click="saveReply">{{ isSaving ? '저장 중' : (qna.qnaReplyNo ? '답변 수정' : '답변 저장') }}</button></div></section>
     </template>
   </admin-goods-layout>
 </template>
@@ -30,7 +30,7 @@ export default {
     saveReply () {
       this.saveError = ''
       this.isSaving = true
-      saveAdminQnaReply(this.qna.qnaNo, { qnaReplyContents: this.replyContents }).then(() => this.loadQna()).catch(error => { const body = error.response && error.response.data; this.saveError = (body && body.ERROR_MSG) || '답변 저장에 실패했습니다.' }).finally(() => { this.isSaving = false })
+      saveAdminQnaReply(this.qna.qnaNo, { qnaReplyContents: this.replyContents }).then(() => { alert(this.qna.qnaReplyNo ? '답변이 수정되었습니다.' : '답변이 등록되었습니다.'); return this.loadQna() }).catch(error => { const body = error.response && error.response.data; this.saveError = (body && body.ERROR_MSG) || '답변 저장에 실패했습니다.' }).finally(() => { this.isSaving = false })
     },
     formatDateTime (value) {
       return value ? new Intl.DateTimeFormat('ko-KR', { dateStyle: 'medium', timeStyle: 'short' }).format(new Date(value)) : '-'
