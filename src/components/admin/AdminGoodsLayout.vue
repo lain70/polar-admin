@@ -7,7 +7,7 @@
         <router-link :to="{ name: 'adminGoodsList' }">상품 관리</router-link>
         <router-link :to="{ name: 'adminUserList' }">회원 관리</router-link>
         <router-link :to="{ name: 'adminAdminList' }">관리자 관리</router-link>
-        <a href="#">문의 관리</a>
+        <router-link :to="{ name: 'adminQnaList' }">문의 관리</router-link>
       </nav>
       <a :href="customerBaseUrl">상점으로 이동 ↗</a>
     </aside>
