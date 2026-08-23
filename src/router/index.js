@@ -49,6 +49,16 @@ const routes = [{
   component: () => import('@/views/admin/admins/AdminAdminDetailView.vue')
 },
 {
+  path: '/qna',
+  name: 'adminQnaList',
+  component: () => import('@/views/admin/qna/AdminQnaListView.vue')
+},
+{
+  path: '/qna/:qnaNo',
+  name: 'adminQnaDetail',
+  component: () => import('@/views/admin/qna/AdminQnaDetailView.vue')
+},
+{
   path: '*',
   redirect: { name: 'adminDashboard' }
 }]

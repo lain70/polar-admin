@@ -54,3 +54,15 @@ export function getAdmin (adminNo) {
 export function updateAdmin (adminNo, data) {
   return requestAdmin({ url: `/admin/admins/${adminNo}`, method: 'PUT', data })
 }
+
+export function getAdminQnaList (params) {
+  return requestAdmin({ url: '/admin/qna', method: 'GET', params })
+}
+
+export function getAdminQna (qnaNo) {
+  return requestAdmin({ url: `/admin/qna/${qnaNo}`, method: 'GET' })
+}
+
+export function saveAdminQnaReply (qnaNo, data) {
+  return requestAdmin({ url: `/admin/qna/${qnaNo}/reply`, method: 'POST', data })
+}
