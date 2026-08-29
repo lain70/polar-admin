@@ -5,6 +5,7 @@
       <nav aria-label="관리자 메뉴">
         <router-link :to="{ name: 'adminDashboard' }">대시보드</router-link>
         <router-link :to="{ name: 'adminGoodsList' }">상품 관리</router-link>
+        <router-link :to="{ name: 'adminEventList' }">이벤트 관리</router-link>
         <router-link :to="{ name: 'adminUserList' }">회원 관리</router-link>
         <router-link :to="{ name: 'adminAdminList' }">관리자 관리</router-link>
         <router-link :to="{ name: 'adminQnaList' }">문의 관리</router-link>
