@@ -15,6 +15,10 @@ export function logoutAdmin () {
   })
 }
 
+export function getAdminMenus () {
+  return requestAdmin({ url: '/admin/menus', method: 'GET' })
+}
+
 export function getAdminGoodsList (params) {
   return requestAdmin({ url: '/admin/goods', method: 'GET', params })
 }
