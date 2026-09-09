@@ -1,6 +1,6 @@
 <template>
   <admin-goods-layout title="상품 목록">
-    <section class="search-panel">
+    <admin-filter-panel class="search-panel">
       <form @submit.prevent="searchGoods">
         <div class="primary-filters">
           <label>검색 조건<select v-model="searchType"><option value="GOODS_NO">상품번호</option><option value="GOODS_NAME">상품명</option><option value="GOODS_CODE">상품 코드</option></select></label>
@@ -15,7 +15,7 @@
         </div>
         <div class="search-actions"><button type="button" class="reset-button" @click="resetFilters">초기화</button><button type="submit">상품 조회</button></div>
       </form>
-    </section>
+    </admin-filter-panel>
     <p v-if="errorMessage" class="error" role="alert">{{ errorMessage }}</p>
     <section class="result-header">
       <div><strong>상품 조회 결과</strong><span>총 {{ totalCount }}개</span></div>
@@ -48,11 +48,12 @@
 </template>
 <script>
 import AdminGoodsLayout from '@/components/admin/AdminGoodsLayout.vue'
+import AdminFilterPanel from '@/components/admin/AdminFilterPanel.vue'
 import { getAdminGoodsList } from '@/api/admin.js'
 import envs from '@/envs'
 export default {
   name: 'AdminGoodsListView',
-  components: { AdminGoodsLayout },
+  components: { AdminGoodsLayout, AdminFilterPanel },
   data: () => ({
     goods: [],
     searchType: 'GOODS_NAME',

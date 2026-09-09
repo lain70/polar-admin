@@ -29,6 +29,21 @@ const routes = [{
   component: () => import('@/views/admin/goods/AdminGoodsDetailView.vue')
 },
 {
+  path: '/events',
+  name: 'adminEventList',
+  component: () => import('@/views/admin/events/AdminEventListView.vue')
+},
+{
+  path: '/events/new',
+  name: 'adminEventCreate',
+  component: () => import('@/views/admin/events/AdminEventFormView.vue')
+},
+{
+  path: '/events/:eventNo',
+  name: 'adminEventEdit',
+  component: () => import('@/views/admin/events/AdminEventFormView.vue')
+},
+{
   path: '/users',
   name: 'adminUserList',
   component: () => import('@/views/admin/users/AdminUserListView.vue')

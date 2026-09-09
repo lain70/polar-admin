@@ -1,6 +1,6 @@
 <template>
   <admin-goods-layout title="문의 관리">
-    <section class="search-panel">
+    <admin-filter-panel class="search-panel">
       <form @submit.prevent="searchQna">
         <div class="primary-filters">
           <label>검색 조건<select v-model="searchType"><option value="QNA_NO">문의번호</option><option value="QNA_TITLE">제목</option></select></label>
@@ -18,7 +18,7 @@
         </div>
         <div class="search-actions"><button type="button" class="reset-button" @click="resetFilters">초기화</button><button type="submit">문의 조회</button></div>
       </form>
-    </section>
+    </admin-filter-panel>
 
     <p v-if="errorMessage" class="error" role="alert">{{ errorMessage }}</p>
     <section class="result-header"><div><strong>문의 조회 결과</strong><span>총 {{ totalCount }}건</span></div><label>목록 표시<select v-model.number="pageSize" @change="changePageSize"><option :value="20">20개</option><option :value="50">50개</option><option :value="100">100개</option></select></label></section>
@@ -47,11 +47,12 @@
 
 <script>
 import AdminGoodsLayout from '@/components/admin/AdminGoodsLayout.vue'
+import AdminFilterPanel from '@/components/admin/AdminFilterPanel.vue'
 import { getAdminQnaList } from '@/api/admin'
 
 export default {
   name: 'AdminQnaListView',
-  components: { AdminGoodsLayout },
+  components: { AdminGoodsLayout, AdminFilterPanel },
   data: () => ({
     qnaList: [],
     searchType: 'QNA_TITLE',

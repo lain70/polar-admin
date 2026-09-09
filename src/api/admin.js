@@ -15,6 +15,10 @@ export function logoutAdmin () {
   })
 }
 
+export function getAdminMenus () {
+  return requestAdmin({ url: '/admin/menus', method: 'GET' })
+}
+
 export function getAdminGoodsList (params) {
   return requestAdmin({ url: '/admin/goods', method: 'GET', params })
 }
@@ -29,6 +33,22 @@ export function createAdminGoods (formData) {
     method: 'POST',
     data: formData
   })
+}
+
+export function getAdminEvents (params) {
+  return requestAdmin({ url: '/admin/events', method: 'GET', params })
+}
+
+export function getAdminEvent (eventNo) {
+  return requestAdmin({ url: `/admin/events/${eventNo}`, method: 'GET' })
+}
+
+export function createAdminEvent (data) {
+  return requestAdmin({ url: '/admin/events', method: 'POST', data })
+}
+
+export function updateAdminEvent (eventNo, data) {
+  return requestAdmin({ url: `/admin/events/${eventNo}`, method: 'PUT', data })
 }
 
 export function getAdminUserList (params) {

@@ -1,17 +1,6 @@
 <template>
   <div class="admin-dashboard">
-    <aside>
-      <div class="brand"><span>P</span> POLAR ADMIN</div>
-      <nav aria-label="관리자 메뉴">
-        <router-link exact :to="{ name: 'adminDashboard' }">대시보드</router-link>
-        <router-link :to="{ name: 'adminGoodsList' }">상품 관리</router-link>
-        <router-link :to="{ name: 'adminUserList' }">회원 관리</router-link>
-        <router-link :to="{ name: 'adminAdminList' }">관리자 관리</router-link>
-        <router-link :to="{ name: 'adminQnaList' }">문의 관리</router-link>
-        <a href="#operations">운영 설정</a>
-      </nav>
-      <a :href="customerBaseUrl">상점으로 이동 ↗</a>
-    </aside>
+    <admin-sidebar />
 
     <main>
       <header>
@@ -55,14 +44,14 @@
 </template>
 
 <script>
-import envs from '@/envs'
+import AdminSidebar from '@/components/admin/AdminSidebar.vue'
 
 export default {
   name: 'AdminDashboardView',
+  components: { AdminSidebar },
   data () {
     return {
       isLoggingOut: false,
-      customerBaseUrl: envs.customerBaseUrl,
       summaryItems: [
         { label: 'MEMBERS', value: '—', description: '전체 회원' },
         { label: 'INQUIRIES', value: '—', description: '미처리 문의' },
@@ -107,64 +96,6 @@ export default {
   background: #f2f6f5;
   color: #143139;
   text-align: left;
-}
-
-aside {
-  min-height: 100vh;
-  padding: 34px 28px;
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  background: #102a31;
-  color: #fff;
-}
-
-.brand {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 11px;
-  font-weight: 800;
-  letter-spacing: 0.16em;
-}
-
-.brand span {
-  width: 32px;
-  height: 32px;
-  display: grid;
-  place-items: center;
-  border: 1px solid #77928e;
-  border-radius: 50%;
-  font-family: Georgia, serif;
-}
-
-nav {
-  margin-top: 72px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-nav a {
-  padding: 14px 16px;
-  border-left: 2px solid transparent;
-  color: #9eb1ae;
-  font-size: 13px;
-  text-decoration: none;
-}
-
-nav a.active,
-nav a.router-link-active {
-  border-color: #9fc5be;
-  background: rgba(255, 255, 255, 0.06);
-  color: #fff;
-}
-
-aside > a {
-  margin-top: auto;
-  color: #9fc5be;
-  font-size: 11px;
-  text-decoration: none;
 }
 
 main {
@@ -305,20 +236,6 @@ header h1 {
 @media (max-width: 900px) {
   .admin-dashboard {
     grid-template-columns: 1fr;
-  }
-
-  aside {
-    min-height: auto;
-  }
-
-  nav {
-    margin-top: 30px;
-    flex-direction: row;
-    overflow-x: auto;
-  }
-
-  aside > a {
-    margin-top: 26px;
   }
 
   main {
