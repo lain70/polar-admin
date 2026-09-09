@@ -1,6 +1,6 @@
 <template>
   <admin-goods-layout title="회원 관리">
-    <section class="search-panel">
+    <admin-filter-panel class="search-panel">
       <form @submit.prevent="searchUsers">
         <div class="primary-filters">
           <label>검색 조건<select v-model="searchType"><option value="USER_NO">회원번호</option><option value="USER_ID">아이디</option><option value="USER_NAME">이름</option><option value="USER_PHONE">연락처</option></select></label>
@@ -14,7 +14,7 @@
         </div>
         <div class="search-actions"><button type="button" class="reset-button" @click="resetFilters">초기화</button><button type="submit">회원 조회</button></div>
       </form>
-    </section>
+    </admin-filter-panel>
     <p v-if="errorMessage" class="error" role="alert">{{ errorMessage }}</p>
     <section class="result-header"><div><strong>회원 조회 결과</strong><span>총 {{ users.length }}명</span></div></section>
     <div class="table-wrap"><table><thead><tr><th>회원번호</th><th>아이디</th><th>이름</th><th>연락처</th><th>등급</th><th>상태</th><th>가입일</th></tr></thead><tbody><tr v-for="user in users" :key="user.userNo"><td>{{ user.userNo }}</td><td><router-link class="account-link" :to="{ name: 'adminUserDetail', params: { userNo: user.userNo } }">{{ user.userId }}</router-link></td><td>{{ user.userName }}</td><td>{{ user.userPhone || '-' }}</td><td>{{ gradeLabel(user.userGrade) }}</td><td>{{ statusLabel(user.userStatus) }}</td><td>{{ formatDate(user.regDate) }}</td></tr><tr v-if="!isLoading && !users.length"><td colspan="7" class="empty">조회된 회원이 없습니다.</td></tr></tbody></table></div>
@@ -22,10 +22,11 @@
 </template>
 <script>
 import AdminGoodsLayout from '@/components/admin/AdminGoodsLayout.vue'
+import AdminFilterPanel from '@/components/admin/AdminFilterPanel.vue'
 import { getAdminUserList } from '@/api/admin'
 export default {
   name: 'AdminUserListView',
-  components: { AdminGoodsLayout },
+  components: { AdminGoodsLayout, AdminFilterPanel },
   data: () => ({ users: [], searchType: 'USER_NAME', keyword: '', registeredFrom: '', registeredTo: '', selectedGrades: [], selectedStatuses: [], isLoading: false, errorMessage: '', gradeOptions: [{ value: 'BRONZE', label: '브론즈' }, { value: 'SILVER', label: '실버' }, { value: 'GOLD', label: '골드' }, { value: 'VIP', label: 'VIP' }], statusOptions: [{ value: 'USR_ST_001', label: '정상' }, { value: 'USR_ST_002', label: '정지' }] }),
   computed: { keywordPlaceholder () { return { USER_NO: '회원번호 입력', USER_ID: '아이디 입력', USER_NAME: '이름 입력', USER_PHONE: '연락처 입력' }[this.searchType] } },
   created () { this.loadUsers() },

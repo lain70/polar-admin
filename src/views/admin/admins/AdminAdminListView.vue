@@ -1,6 +1,6 @@
 <template>
   <admin-goods-layout title="관리자 관리">
-    <section class="search-panel">
+    <admin-filter-panel class="search-panel">
       <form @submit.prevent="searchAdmins">
         <div class="primary-filters">
           <label>검색 조건<select v-model="searchType"><option value="ADMIN_NO">관리자번호</option><option value="ADMIN_ID">아이디</option><option value="ADMIN_NAME">이름</option></select></label>
@@ -16,7 +16,7 @@
         </div>
         <div class="search-actions"><button type="button" class="reset-button" @click="resetFilters">초기화</button><button type="submit">관리자 조회</button></div>
       </form>
-    </section>
+    </admin-filter-panel>
     <p v-if="errorMessage" class="error" role="alert">{{ errorMessage }}</p>
     <section class="result-header"><div><strong>관리자 조회 결과</strong><span>총 {{ admins.length }}명</span></div></section>
     <div class="table-wrap"><table><thead><tr><th>관리자번호</th><th>아이디</th><th>이름</th><th>연락처</th><th>부서</th><th>직책</th><th>상태</th><th>사용 여부</th><th>가입일</th></tr></thead><tbody><tr v-for="admin in admins" :key="admin.adminNo"><td>{{ admin.adminNo }}</td><td><router-link class="account-link" :to="{ name: 'adminAdminDetail', params: { adminNo: admin.adminNo } }">{{ admin.adminId }}</router-link></td><td>{{ admin.adminName }}</td><td>{{ admin.adminPhone || '-' }}</td><td>{{ admin.adminDepartment || '-' }}</td><td>{{ admin.adminPosition || '-' }}</td><td>{{ statusLabel(admin.adminStatus) }}</td><td>{{ admin.useYn === 'Y' ? '사용' : '미사용' }}</td><td>{{ formatDate(admin.regDate) }}</td></tr><tr v-if="!isLoading && !admins.length"><td colspan="9" class="empty">조회된 관리자가 없습니다.</td></tr></tbody></table></div>
@@ -24,10 +24,11 @@
 </template>
 <script>
 import AdminGoodsLayout from '@/components/admin/AdminGoodsLayout.vue'
+import AdminFilterPanel from '@/components/admin/AdminFilterPanel.vue'
 import { getAdminList } from '@/api/admin'
 export default {
   name: 'AdminAdminListView',
-  components: { AdminGoodsLayout },
+  components: { AdminGoodsLayout, AdminFilterPanel },
   data: () => ({ admins: [], searchType: 'ADMIN_NAME', keyword: '', registeredFrom: '', registeredTo: '', selectedDepartments: [], selectedPositions: [], selectedStatuses: [], selectedUseYns: [], departmentOptions: [], positionOptions: [], statusOptions: [{ value: 'AD_ST_001', label: '정상' }, { value: 'AD_ST_002', label: '정지' }], useYnOptions: [{ value: 'Y', label: '사용' }, { value: 'N', label: '미사용' }], isLoading: false, errorMessage: '' }),
   computed: { keywordPlaceholder () { return { ADMIN_NO: '관리자번호 입력', ADMIN_ID: '아이디 입력', ADMIN_NAME: '이름 입력' }[this.searchType] } },
   created () { this.loadAdmins() },

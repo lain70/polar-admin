@@ -35,8 +35,8 @@ export function createAdminGoods (formData) {
   })
 }
 
-export function getAdminEvents () {
-  return requestAdmin({ url: '/admin/events', method: 'GET' })
+export function getAdminEvents (params) {
+  return requestAdmin({ url: '/admin/events', method: 'GET', params })
 }
 
 export function getAdminEvent (eventNo) {
