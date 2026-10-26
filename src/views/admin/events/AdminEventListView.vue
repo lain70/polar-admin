@@ -56,20 +56,21 @@ import { getAdminEvents } from '@/api/admin'
 export default {
   name: 'AdminEventListView',
   components: { AdminGoodsLayout, AdminFilterPanel },
-  data: () => ({ events: [], searchType: 'EVENT_NO', keyword: '', eventStartDate: '', eventEndDate: '', selectedStatuses: [], selectedUseYns: [], selectedDisplayYns: [], errorMessage: '', statusOptions: [{ value: 'ONGOING', label: '진행중' }, { value: 'ENDED', label: '종료' }], ynOptions: [{ value: 'Y', label: '사용' }, { value: 'N', label: '미사용' }] }),
+  data: () => ({ latestRequestId: 0, events: [], searchType: 'EVENT_NO', keyword: '', eventStartDate: '', eventEndDate: '', selectedStatuses: [], selectedUseYns: [], selectedDisplayYns: [], errorMessage: '', statusOptions: [{ value: 'ONGOING', label: '진행중' }, { value: 'ENDED', label: '종료' }], ynOptions: [{ value: 'Y', label: '사용' }, { value: 'N', label: '미사용' }] }),
   created () {
     this.loadEvents()
   },
   methods: {
     loadEvents () {
+      const requestId = ++this.latestRequestId
       this.errorMessage = ''
       if (this.eventStartDate && this.eventEndDate && this.eventEndDate < this.eventStartDate) {
         this.errorMessage = '진행 종료일은 시작일 이후로 선택해 주세요.'
         return
       }
       getAdminEvents({ eventNo: this.keyword || undefined, eventStartDate: this.eventStartDate || undefined, eventEndDate: this.eventEndDate || undefined, statuses: this.selectedStatuses.length ? this.selectedStatuses.join(',') : undefined, useYns: this.selectedUseYns.length ? this.selectedUseYns.join(',') : undefined, displayYns: this.selectedDisplayYns.length ? this.selectedDisplayYns.join(',') : undefined })
-        .then(({ data }) => { this.events = data })
-        .catch(() => { this.errorMessage = '이벤트 목록을 불러오지 못했습니다.' })
+        .then(({ data }) => { if (requestId !== this.latestRequestId) return; this.events = data })
+        .catch(() => { if (requestId !== this.latestRequestId) return; this.errorMessage = '이벤트 목록을 불러오지 못했습니다.' })
     },
     searchEvents () { this.loadEvents() },
     resetFilters () { this.keyword = ''; this.eventStartDate = ''; this.eventEndDate = ''; this.selectedStatuses = []; this.selectedUseYns = []; this.selectedDisplayYns = []; this.loadEvents() },
@@ -79,5 +80,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.result-header { margin: 36px 0 14px; display: flex; align-items: center; justify-content: space-between; } .result-header > div { display: flex; align-items: baseline; gap: 12px; } .result-header span { color: #728682; font-size: 11px; } .result-header a { padding: 12px 22px; background: #183c43; color: #fff; text-decoration: none; } .table-wrap { overflow-x: auto; background: #fff; } table { width: 100%; border-collapse: collapse; } th,td { padding: 15px; border-bottom: 1px solid #e1e8e6; font-size: 12px; text-align: left; } th { color: #718682; } td a { color: #163b43; text-decoration: none; } .empty { padding: 50px; text-align: center; } .error { color: #b14949; }
+.result-header { margin: 36px 0 14px; display: flex; align-items: center; justify-content: space-between; } .result-header > div { display: flex; align-items: baseline; gap: 12px; } .result-header span { color: #728682; font-size: 14px; } .result-header a { padding: 12px 22px; background: var(--color-primary); color: #fff; text-decoration: none; } .table-wrap { overflow-x: auto; background: #fff; } table { width: 100%; border-collapse: collapse; } th,td { padding: 15px; border-bottom: 1px solid #e1e8e6; font-size: 14px; text-align: left; } th { color: #718682; } td a { color: #163b43; text-decoration: none; } .empty { padding: 50px; text-align: center; } .error { color: var(--color-destructive); }
 </style>

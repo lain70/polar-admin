@@ -1,13 +1,9 @@
-import Vue from 'vue'
+import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
 import './assets/scss/admin-filters.scss'
 
-Vue.config.productionTip = false
+import './assets/scss/theme.scss'
 
-new Vue({
-  router,
-  store,
-  render: h => h(App)
-}).$mount('#app')
+createApp(App).use(store).use(router).mount('#app')

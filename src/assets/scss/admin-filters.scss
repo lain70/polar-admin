@@ -7,7 +7,7 @@
 
 .admin-filter-grid {
   display: grid;
-  grid-template-columns: 160px minmax(220px, 1fr) 220px 220px;
+  grid-template-columns: minmax(120px, .8fr) minmax(180px, 1.2fr) minmax(180px, 1fr) minmax(180px, 1fr);
   gap: 16px;
 }
 
@@ -16,7 +16,7 @@
   flex-direction: column;
   gap: 8px;
   color: #536a66;
-  font-size: 11px;
+  font-size: 14px;
   font-weight: 700;
 }
 
@@ -61,7 +61,7 @@
   align-items: center;
   gap: 6px;
   color: #536a66;
-  font-size: 11px;
+  font-size: 14px;
   font-weight: 400;
 }
 
@@ -75,7 +75,7 @@
 .admin-filter-actions button {
   padding: 12px 22px;
   border: 0;
-  background: #183c43;
+  background: var(--color-primary);
   color: #fff;
   cursor: pointer;
 }
@@ -103,8 +103,8 @@
 }
 
 .admin-filter-details summary span {
-  color: #82938f;
-  font-size: 10px;
+  color: var(--color-muted-foreground);
+  font-size: 12px;
   font-weight: 400;
 }
 
@@ -131,3 +131,7 @@
   .admin-filter-grid,
   .admin-filter-checks, .event-filter-checks { grid-template-columns: 1fr; }
 }
+
+.admin-filter-panel { border-radius: var(--radius-card); }
+.admin-filter-field input, .admin-filter-field select, .admin-filter-details { border-radius: 6px; }
+.admin-filter-check-list label { min-height: 32px; }

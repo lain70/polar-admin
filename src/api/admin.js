@@ -35,6 +35,14 @@ export function createAdminGoods (formData) {
   })
 }
 
+export function updateAdminGoods (goodsNo, data) {
+  return requestAdmin({ url: `/admin/goods/${goodsNo}`, method: 'PUT', data })
+}
+
+export function getAdminGoodsHistory (goodsNo, params) {
+  return requestAdmin({ url: `/admin/goods/${goodsNo}/history`, method: 'GET', params })
+}
+
 export function getAdminEvents (params) {
   return requestAdmin({ url: '/admin/events', method: 'GET', params })
 }

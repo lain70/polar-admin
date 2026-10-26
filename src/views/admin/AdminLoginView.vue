@@ -167,7 +167,7 @@ export default {
   align-items: center;
   gap: 12px;
   color: #fff;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 800;
   letter-spacing: 0.18em;
   text-decoration: none;
@@ -192,7 +192,7 @@ export default {
 .eyebrow {
   margin: 0 0 22px;
   color: var(--mint);
-  font-size: 11px;
+  font-size: 14px;
   font-weight: 800;
   letter-spacing: 0.26em;
 }
@@ -228,14 +228,14 @@ export default {
 }
 
 .security-status strong {
-  font-size: 10px;
+  font-size: 14px;
   letter-spacing: 0.16em;
 }
 
 .security-status p {
   margin: 5px 0 0;
   color: rgba(255, 255, 255, 0.5);
-  font-size: 11px;
+  font-size: 14px;
 }
 
 .admin-form-panel {
@@ -256,7 +256,7 @@ export default {
   padding-bottom: 14px;
   border-bottom: 1px solid #cddbd8;
   color: #63827d;
-  font-size: 10px;
+  font-size: 14px;
   font-weight: 800;
   letter-spacing: 0.18em;
 }
@@ -282,7 +282,7 @@ form {
 
 form label {
   margin-bottom: 9px;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 800;
 }
 
@@ -294,7 +294,7 @@ form label {
 
 .password-label span {
   color: #849895;
-  font-size: 9px;
+  font-size: 14px;
   letter-spacing: 0.14em;
 }
 
@@ -335,14 +335,14 @@ input:disabled {
 .error-message {
   margin: 14px 0 -8px;
   color: #a84242;
-  font-size: 12px;
+  font-size: 14px;
 }
 
 .back-link {
   display: inline-block;
   margin-top: 28px;
   color: #607975;
-  font-size: 12px;
+  font-size: 14px;
   text-decoration: none;
 }
 

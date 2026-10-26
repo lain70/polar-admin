@@ -1,7 +1,4 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router'
-
-Vue.use(VueRouter)
+import { createRouter, createWebHistory } from 'vue-router'
 
 const routes = [{
   path: '/login',
@@ -74,13 +71,12 @@ const routes = [{
   component: () => import('@/views/admin/qna/AdminQnaDetailView.vue')
 },
 {
-  path: '*',
+  path: '/:pathMatch(.*)*',
   redirect: { name: 'adminDashboard' }
 }]
 
-const router = new VueRouter({
-  mode: 'history',
-  base: process.env.BASE_URL,
+const router = createRouter({
+  history: createWebHistory(process.env.BASE_URL),
   routes
 })
 
