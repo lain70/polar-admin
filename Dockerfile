@@ -1,4 +1,4 @@
-FROM node:18-alpine AS builder
+FROM node:22-alpine AS builder
 
 WORKDIR /workspace
 
@@ -16,7 +16,7 @@ ENV VUE_APP_API_BASE_URL=${VUE_APP_API_BASE_URL}
 ENV VUE_APP_CUSTOMER_BASE_URL=${VUE_APP_CUSTOMER_BASE_URL}
 ENV VUE_APP_PUBLIC_PATH=${VUE_APP_PUBLIC_PATH}
 
-RUN npx vue-cli-service build --mode prd
+RUN npm run build:prd
 
 FROM nginx:1.27-alpine
 

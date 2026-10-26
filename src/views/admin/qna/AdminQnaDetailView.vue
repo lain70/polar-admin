@@ -40,26 +40,26 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-section { margin-top: 24px; padding: 28px; border: 1px solid #dce5e3; background: #fff; }
+section { margin-top: 24px; padding: 28px; border: 1px solid var(--color-border); background: #fff; }
 .summary { margin-top: 36px; display: grid; grid-template-columns: 1fr 360px; gap: 40px; align-items: start; }
-.eyebrow { margin: 0 0 10px; color: #78908c; font-size: 10px; font-weight: 800; letter-spacing: .16em; }
+.eyebrow { margin: 0 0 10px; color: var(--color-muted-foreground); font-size: 14px; font-weight: 800; letter-spacing: .16em; }
 .summary h2, .content-card h2 { margin: 0; font-family: Georgia, 'Noto Serif KR', serif; font-size: 28px; font-weight: 400; }
-.summary .status { display: inline-block; margin: 22px 0 0; padding: 7px 10px; background: #f3e1df; color: #a35252; font-size: 11px; }
+.summary .status { display: inline-block; margin: 22px 0 0; padding: 7px 10px; background: #f3e1df; color: #a35252; font-size: 14px; }
 .summary .status.complete { background: #dceae7; color: #4d827b; }
 dl { margin: 0; }
 dl div { display: grid; grid-template-columns: 100px 1fr; border-bottom: 1px solid #e5ebe9; }
-dt, dd { margin: 0; padding: 13px; font-size: 12px; }
+dt, dd { margin: 0; padding: 13px; font-size: 14px; }
 dt { color: #748783; } dd { color: #29484d; }
 .content-card p { margin: 26px 0 0; color: #52676a; line-height: 1.9; white-space: pre-wrap; }
 .reply-card { padding: 32px; }
 .section-heading { display: flex; align-items: flex-end; justify-content: space-between; }
-.section-heading > span { color: #78908c; font-size: 11px; }
-.reply-card label { margin-top: 28px; display: flex; flex-direction: column; gap: 9px; color: #536a66; font-size: 11px; font-weight: 700; }
+.section-heading > span { color: var(--color-muted-foreground); font-size: 14px; }
+.reply-card label { margin-top: 28px; display: flex; flex-direction: column; gap: 9px; color: #536a66; font-size: 14px; font-weight: 700; }
 textarea { min-height: 190px; padding: 14px; border: 1px solid #cbd8d5; color: #29484d; font: inherit; line-height: 1.7; resize: vertical; }
 .actions { margin-top: 20px; display: flex; justify-content: flex-end; gap: 8px; }
 .actions a, .actions button { padding: 12px 22px; border: 1px solid #b9cac6; background: #fff; color: #526c68; text-decoration: none; cursor: pointer; }
-.actions button { border-color: #183c43; background: #183c43; color: #fff; }
+.actions button { border-color: var(--color-primary); background: var(--color-primary); color: #fff; }
 .actions button:disabled { cursor: wait; opacity: .55; }
-.error { color: #b14949; }
+.error { color: var(--color-destructive); }
 @media (max-width: 800px) { .summary { grid-template-columns: 1fr; gap: 24px; } }
 </style>

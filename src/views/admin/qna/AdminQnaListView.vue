@@ -64,6 +64,7 @@ export default {
     totalCount: 0,
     currentPage: 1,
     pageSize: 20,
+    latestRequestId: 0,
     isLoading: false,
     errorMessage: ''
   }),
@@ -85,6 +86,8 @@ export default {
   },
   methods: {
     loadQna () {
+      const requestId = ++this.latestRequestId
+      this.isLoading = false
       this.errorMessage = ''
       if (this.registeredFrom && this.registeredTo && this.registeredTo < this.registeredFrom) {
         this.errorMessage = '등록 종료일시는 시작일시 이후로 선택해 주세요.'
@@ -100,12 +103,15 @@ export default {
         page: this.currentPage,
         size: this.pageSize
       }).then(({ data }) => {
+        if (requestId !== this.latestRequestId) return
         this.qnaList = data.items
         this.totalCount = data.totalCount
       }).catch(error => {
+        if (requestId !== this.latestRequestId) return
         const body = error.response && error.response.data
         this.errorMessage = (body && body.ERROR_MSG) || '문의 목록을 불러오지 못했습니다.'
       }).finally(() => {
+        if (requestId !== this.latestRequestId) return
         this.isLoading = false
       })
     },
@@ -142,26 +148,26 @@ export default {
 <style lang="scss" scoped>
 .search-panel { margin-top: 36px; padding: 26px; border: 1px solid #d7e2df; background: #fff; }
 .primary-filters { display: grid; grid-template-columns: 160px minmax(220px, 1fr) 220px 220px; gap: 16px; }
-label { display: flex; flex-direction: column; gap: 8px; color: #536a66; font-size: 11px; font-weight: 700; }
+label { display: flex; flex-direction: column; gap: 8px; color: #536a66; font-size: 14px; font-weight: 700; }
 input, select { min-width: 0; padding: 12px; box-sizing: border-box; border: 1px solid #cbd8d5; background: #fff; }
 .advanced-filters { margin-top: 18px; max-width: 320px; }
 details { position: relative; border: 1px solid #d5dfdd; }
-summary { padding: 13px 14px; display: flex; justify-content: space-between; color: #405b57; font-size: 12px; font-weight: 700; cursor: pointer; list-style: none; }
-summary span { color: #82938f; font-size: 10px; font-weight: 400; }
+summary { padding: 13px 14px; display: flex; justify-content: space-between; color: #405b57; font-size: 14px; font-weight: 700; cursor: pointer; list-style: none; }
+summary span { color: #82938f; font-size: 14px; font-weight: 400; }
 .checkbox-list { position: absolute; z-index: 3; top: 46px; left: -1px; right: -1px; padding: 14px; display: grid; gap: 11px; border: 1px solid #cbd8d5; background: #fff; box-shadow: 0 12px 28px rgba(20, 49, 57, .12); }
 .checkbox-list label { flex-direction: row; align-items: center; }
 .checkbox-list input { padding: 0; }
 .search-actions { margin-top: 22px; display: flex; justify-content: center; gap: 8px; }
-button { padding: 12px 22px; border: 0; background: #183c43; color: #fff; cursor: pointer; }
+button { padding: 12px 22px; border: 0; background: var(--color-primary); color: #fff; cursor: pointer; }
 .reset-button { border: 1px solid #b9cac6; background: #fff; color: #526c68; }
 .result-header { margin: 28px 0 12px; display: flex; align-items: center; justify-content: space-between; }
 .result-header > div { display: flex; align-items: baseline; gap: 10px; }
-.result-header span { color: #728682; font-size: 11px; }
+.result-header span { color: #728682; font-size: 14px; }
 .result-header > label { flex-direction: row; align-items: center; white-space: nowrap; }
 .result-header select { padding: 10px 30px 10px 10px; }
 .table-wrap { overflow-x: auto; background: #fff; }
 table { width: 100%; border-collapse: collapse; }
-th, td { padding: 14px; border-bottom: 1px solid #e1e8e6; font-size: 12px; }
+th, td { padding: 14px; border-bottom: 1px solid #e1e8e6; font-size: 14px; }
 th { color: #718682; text-align: left; }
 td a { color: #163b43; font-weight: 700; text-decoration: none; }
 .answer-status { color: #a35252; }
@@ -169,9 +175,9 @@ td a { color: #163b43; font-weight: 700; text-decoration: none; }
 .empty { padding: 50px; text-align: center; }
 .pagination { margin-top: 22px; display: flex; justify-content: center; gap: 6px; }
 .pagination button { min-width: 38px; padding: 10px 12px; border: 1px solid #cbd8d5; background: #fff; color: #526c68; }
-.pagination button.active { border-color: #183c43; background: #183c43; color: #fff; }
+.pagination button.active { border-color: var(--color-primary); background: var(--color-primary); color: #fff; }
 .pagination button:disabled { opacity: .4; cursor: default; }
-.error { color: #b14949; }
+.error { color: var(--color-destructive); }
 @media (max-width: 1100px) { .primary-filters { grid-template-columns: 1fr 2fr; } }
 @media (max-width: 650px) { .primary-filters { grid-template-columns: 1fr; } .result-header { align-items: flex-start; gap: 12px; flex-direction: column; } }
 </style>

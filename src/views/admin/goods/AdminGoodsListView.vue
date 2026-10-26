@@ -13,7 +13,7 @@
           <details><summary>브랜드 <span>{{ selectedBrandNos.length ? `${selectedBrandNos.length}개 선택` : '전체' }}</span></summary><div class="checkbox-list"><label v-for="brand in brandOptions" :key="brand.brandNo"><input v-model="selectedBrandNos" type="checkbox" :value="brand.brandNo">{{ brand.brandNameKo }}</label><p v-if="!brandOptions.length">등록된 브랜드가 없습니다.</p></div></details>
           <details><summary>카테고리 <span>{{ selectedCategoryNos.length ? `${selectedCategoryNos.length}개 선택` : '전체' }}</span></summary><div class="checkbox-list"><label v-for="category in categoryOptions" :key="category.categoryNo"><input v-model="selectedCategoryNos" type="checkbox" :value="category.categoryNo">{{ category.categoryName }}</label><p v-if="!categoryOptions.length">등록된 카테고리가 없습니다.</p></div></details>
         </div>
-        <div class="search-actions"><button type="button" class="reset-button" @click="resetFilters">초기화</button><button type="submit">상품 조회</button></div>
+        <div class="search-actions"><button type="button" class="reset-button" @click="resetFilters">초기화</button><button type="submit" :disabled="isLoading">{{ isLoading ? '조회 중...' : '상품 조회' }}</button></div>
       </form>
     </admin-filter-panel>
     <p v-if="errorMessage" class="error" role="alert">{{ errorMessage }}</p>
@@ -25,15 +25,16 @@
       </div>
     </section>
     <div class="table-wrap">
-      <table>
+      <table :aria-busy="isLoading">
         <thead><tr><th>이미지</th><th>상품번호</th><th>상품명</th><th>브랜드/카테고리</th><th>판매자</th><th>판매가</th><th>상태</th><th>전시</th></tr></thead>
         <tbody>
+          <tr v-if="isLoading"><td colspan="8" class="empty" role="status">상품을 불러오는 중입니다.</td></tr>
           <tr v-for="goods in goods" :key="goods.goodsNo">
             <td><img v-if="goods.representativeImageUrl" :src="imageUrl(goods.representativeImageUrl)" :alt="goods.goodsNameKo"><span v-else class="no-image">NO IMAGE</span></td>
             <td><router-link :to="{ name: 'adminGoodsDetail', params: { goodsNo: goods.goodsNo } }">{{ goods.goodsNo }}</router-link></td>
             <td><router-link :to="{ name: 'adminGoodsDetail', params: { goodsNo: goods.goodsNo } }"><strong>{{ goods.goodsNameKo }}</strong><small>{{ goods.goodsNameEn }}</small></router-link></td>
             <td>{{ goods.brandNameKo || '-' }}<small>{{ goods.categoryName }}</small></td><td>{{ goods.sellerName }}</td>
-            <td>{{ currency(goods.discountPrice || goods.salePrice) }}</td><td>{{ statusLabel(goods.goodsStatus) }}</td><td>{{ goods.displayYn === 'Y' ? '전시' : '미전시' }}</td>
+            <td>{{ currency(goods.discountPrice == null ? goods.salePrice : goods.discountPrice) }}</td><td>{{ statusLabel(goods.goodsStatus) }}</td><td>{{ goods.displayYn === 'Y' ? '전시' : '미전시' }}</td>
           </tr>
           <tr v-if="!isLoading && !goods.length"><td colspan="8" class="empty">등록된 상품이 없습니다.</td></tr>
         </tbody>
@@ -75,6 +76,7 @@ export default {
     totalCount: 0,
     currentPage: 1,
     pageSize: 20,
+    latestRequestId: 0,
     isLoading: false,
     errorMessage: ''
   }),
@@ -94,6 +96,8 @@ export default {
   created () { this.loadGoods() },
   methods: {
     loadGoods () {
+      const requestId = ++this.latestRequestId
+      this.isLoading = false
       this.errorMessage = ''
       if (this.registeredFrom && this.registeredTo && this.registeredTo < this.registeredFrom) {
         this.errorMessage = '등록 종료일시는 시작일시 이후로 선택해 주세요.'
@@ -111,11 +115,12 @@ export default {
         page: this.currentPage,
         size: this.pageSize
       }).then(({ data }) => {
+        if (requestId !== this.latestRequestId) return
         this.goods = data.items
         this.totalCount = data.totalCount
         this.brandOptions = data.brands
         this.categoryOptions = data.categories
-      }).catch(error => { const responseData = error.response && error.response.data; this.errorMessage = (responseData && responseData.ERROR_MSG) || '상품 목록을 불러오지 못했습니다.' }).finally(() => { this.isLoading = false })
+      }).catch(error => { if (requestId !== this.latestRequestId) return; const responseData = error.response && error.response.data; this.errorMessage = (responseData && responseData.ERROR_MSG) || '상품 목록을 불러오지 못했습니다.' }).finally(() => { if (requestId === this.latestRequestId) this.isLoading = false })
     },
     searchGoods () {
       this.currentPage = 1
@@ -149,5 +154,5 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.search-panel { margin-top: 36px; padding: 26px; border: 1px solid #d7e2df; background: #fff; } .primary-filters { display: grid; grid-template-columns: 160px minmax(220px,1fr) 220px 220px; gap: 16px; } label { display: flex; flex-direction: column; gap: 8px; color: #536a66; font-size: 11px; font-weight: 700; } input,select { min-width: 0; padding: 12px; box-sizing: border-box; border: 1px solid #cbd8d5; background: #fff; } .advanced-filters { margin-top: 18px; display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; } details { position: relative; border: 1px solid #d5dfdd; } summary { padding: 13px 14px; display: flex; justify-content: space-between; color: #405b57; font-size: 12px; font-weight: 700; cursor: pointer; list-style: none; } summary span { color: #82938f; font-size: 10px; font-weight: 400; } .checkbox-list { position: absolute; z-index: 3; top: 46px; left: -1px; right: -1px; max-height: 220px; padding: 14px; display: grid; gap: 11px; overflow-y: auto; border: 1px solid #cbd8d5; background: #fff; box-shadow: 0 12px 28px rgba(20,49,57,.12); } .checkbox-list label { flex-direction: row; align-items: center; } .checkbox-list input { padding: 0; } .checkbox-list p { color: #879793; font-size: 11px; } .search-actions { margin-top: 22px; display: flex; justify-content: center; gap: 8px; } button,.result-header a { padding: 12px 22px; border: 0; background: #183c43; color: #fff; text-decoration: none; cursor: pointer; } .reset-button { border: 1px solid #b9cac6; background: #fff; color: #526c68; } .result-header { margin: 28px 0 12px; display: flex; align-items: center; justify-content: space-between; } .result-header > div:first-child { display: flex; align-items: baseline; gap: 10px; } .result-header span { color: #728682; font-size: 11px; } .result-actions { display: flex; align-items: flex-end; gap: 10px; } .result-actions label { flex-direction: row; align-items: center; white-space: nowrap; } .result-actions select { padding: 10px 30px 10px 10px; } .table-wrap { overflow-x: auto; background: #fff; } table { width: 100%; border-collapse: collapse; } th,td { padding: 14px; border-bottom: 1px solid #e1e8e6; font-size: 12px; } th { color: #718682; text-align: left; } td img,.no-image { width: 54px; height: 54px; object-fit: cover; display: grid; place-items: center; background: #edf2f1; color: #93a29f; font-size: 8px; } td a { color: #163b43; text-decoration: none; } td small { margin-top: 5px; display: block; color: #81918e; } .empty { padding: 50px; text-align: center; } .pagination { margin-top: 22px; display: flex; justify-content: center; gap: 6px; } .pagination button { min-width: 38px; padding: 10px 12px; border: 1px solid #cbd8d5; background: #fff; color: #526c68; } .pagination button.active { border-color: #183c43; background: #183c43; color: #fff; } .pagination button:disabled { opacity: .4; cursor: default; } .error { color: #b14949; } @media(max-width:1100px){.primary-filters{grid-template-columns:1fr 2fr}.advanced-filters{grid-template-columns:1fr}} @media(max-width:650px){.primary-filters{grid-template-columns:1fr}.result-header{align-items:flex-start;gap:12px;flex-direction:column}.result-actions{width:100%;justify-content:space-between}}
+.search-panel { margin-top: 36px; padding: 26px; border: 1px solid #d7e2df; background: #fff; } .primary-filters { display: grid; grid-template-columns: minmax(120px,.8fr) minmax(180px,1.2fr) minmax(180px,1fr) minmax(180px,1fr); gap: 16px; } label { display: flex; flex-direction: column; gap: 8px; color: #536a66; font-size: 14px; font-weight: 700; } input,select { min-width: 0; padding: 12px; box-sizing: border-box; border: 1px solid #cbd8d5; background: #fff; } .advanced-filters { margin-top: 18px; display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; } details { position: relative; border: 1px solid #d5dfdd; } summary { padding: 13px 14px; display: flex; justify-content: space-between; color: #405b57; font-size: 14px; font-weight: 700; cursor: pointer; list-style: none; } summary span { color: #82938f; font-size: 14px; font-weight: 400; } .checkbox-list { position: absolute; z-index: 3; top: 46px; left: -1px; right: -1px; max-height: 220px; padding: 14px; display: grid; gap: 11px; overflow-y: auto; border: 1px solid #cbd8d5; background: #fff; box-shadow: 0 12px 28px rgba(20,49,57,.12); } .checkbox-list label { flex-direction: row; align-items: center; } .checkbox-list input { padding: 0; } .checkbox-list p { color: #879793; font-size: 14px; } .search-actions { margin-top: 22px; display: flex; justify-content: center; gap: 8px; } button,.result-header a { padding: 12px 22px; border: 0; background: var(--color-primary); color: #fff; text-decoration: none; cursor: pointer; } .reset-button { border: 1px solid #b9cac6; background: #fff; color: #526c68; } .result-header { margin: 28px 0 12px; display: flex; align-items: center; justify-content: space-between; } .result-header > div:first-child { display: flex; align-items: baseline; gap: 10px; } .result-header span { color: #728682; font-size: 14px; } .result-actions { display: flex; align-items: flex-end; gap: 10px; } .result-actions label { flex-direction: row; align-items: center; white-space: nowrap; } .result-actions select { padding: 10px 30px 10px 10px; } .table-wrap { overflow-x: auto; background: #fff; } table { width: 100%; border-collapse: collapse; } th,td { padding: 14px; border-bottom: 1px solid #e1e8e6; font-size: 14px; } th { color: #718682; text-align: left; } td img,.no-image { width: 54px; height: 54px; object-fit: cover; display: grid; place-items: center; background: #edf2f1; color: #93a29f; font-size: 8px; } td a { color: #163b43; text-decoration: none; } td small { margin-top: 5px; display: block; color: #81918e; } .empty { padding: 50px; text-align: center; } .pagination { margin-top: 22px; display: flex; justify-content: center; gap: 6px; } .pagination button { min-width: 38px; padding: 10px 12px; border: 1px solid #cbd8d5; background: #fff; color: #526c68; } .pagination button.active { border-color: var(--color-primary); background: var(--color-primary); color: #fff; } .pagination button:disabled { opacity: .4; cursor: default; } .error { color: var(--color-destructive); } @media(max-width:1100px){.primary-filters{grid-template-columns:1fr 2fr}.advanced-filters{grid-template-columns:1fr}} @media(max-width:650px){.primary-filters{grid-template-columns:1fr}.result-header{align-items:flex-start;gap:12px;flex-direction:column}.result-actions{width:100%;justify-content:space-between}}
 </style>
